@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.eti.vinicius.osAPI.domain.model;
 
 import jakarta.persistence.Column;
@@ -9,17 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Objects; // Importação necessária para o novo hashCode/equals
 
-/**
- *
- * @author digma
- */
 @Entity
 public class Cliente {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String nome;
     private String email;
     
@@ -29,18 +22,20 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(long id, String nome, String email, String fone) {
+    // ALTERADO: long -> Long
+    public Cliente(Long id, String nome, String email, String fone) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.fone = fone;
     }
 
-    public long getId() {
+    // ALTERADO: long -> Long
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -70,26 +65,16 @@ public class Cliente {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + (int) (this.id ^ (this.id >>> 32));
-        return hash;
+        // ALTERADO: Simplificado para não dar erro de NullPointer quando o ID for nulo
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Cliente other = (Cliente) obj;
-        return this.id == other.id;
+        // ALTERADO: Uso de Objects.equals para comparar objetos Long com segurança
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Cliente other = (Cliente) obj;
+        return Objects.equals(id, other.id);
     }
-    
-    
-    
 }
