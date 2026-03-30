@@ -6,6 +6,7 @@ package br.eti.vinicius.osAPI.api.controller;
 
 import br.eti.vinicius.osAPI.domain.model.Cliente;
 import br.eti.vinicius.osAPI.domain.repository.ClienteRepository;
+import br.eti.vinicius.osAPI.domain.service.ClienteService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
@@ -37,6 +38,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
     
+    @Autowired
+    private ClienteService clienteService;
+    
 //     List<Cliente> listaClientes;
     
     @GetMapping ("/clientes")
@@ -59,7 +63,7 @@ public class ClienteController {
     @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+        return clienteService.salvar(cliente);
     }
     
     @PutMapping("/clientes/{clienteID}")
@@ -69,7 +73,7 @@ public class ClienteController {
             return ResponseEntity.notFound().build();
         }
         cliente.setId(clienteID);
-        cliente = clienteRepository.save(cliente);
+        cliente = clienteService.salvar(cliente);
         return ResponseEntity.ok(cliente);
     }
     
@@ -78,7 +82,7 @@ public class ClienteController {
          if (!clienteRepository.existsById(clienteID)) {
             return ResponseEntity.notFound().build();
         }
-        clienteRepository.deleteById(clienteID);
+        clienteService.excluir(clienteID);
         return ResponseEntity.noContent().build();
     }
     
