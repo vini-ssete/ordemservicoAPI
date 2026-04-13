@@ -4,6 +4,7 @@
  */
 package br.eti.vinicius.osAPI.api.controller;
 
+import br.eti.vinicius.osAPI.domain.dto.AtualizaStatusDTO;
 import br.eti.vinicius.osAPI.domain.model.Cliente;
 import br.eti.vinicius.osAPI.domain.model.OrdemServico;
 import br.eti.vinicius.osAPI.domain.service.OrdemServicoService;
@@ -85,4 +86,20 @@ public class OrdemServicoController {
         ordemServicoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @PutMapping("/atualiza-status/{ordemServicoID}")
+    public ResponseEntity<OrdemServico> atualizaStatus(
+    @PathVariable Long ordemServicoID,
+            @Valid @RequestBody AtualizaStatusDTO statusDTO) {
+            
+        Optional<OrdemServico> optOS = ordemServicoService.atualizaStatus(
+        ordemServicoID,
+                statusDTO.status());
+        
+        if (optOS.isPresent()) {
+            return ResponseEntity.ok(optOS.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    } 
 }
