@@ -101,5 +101,27 @@ public class OrdemServicoService {
 
         // 3. Salvar no banco
         return comentarioRepository.save(comentario);
+        
+        
     }
+    
+    public void excluirComentario(Long id) {
+    comentarioRepository.deleteById(id);
+    }
+    
+    @Transactional
+    public Comentario atualizarComentario(Long comentarioId, String novaDescricao) {
+    // 1. Busca o comentário ou lança erro se não existir
+    Comentario comentario = comentarioRepository.findById(comentarioId)
+            .orElseThrow(() -> new DomainException("Comentário não encontrado"));
+
+    // 2. Altera apenas a descrição
+    comentario.setDescricao(novaDescricao);
+    
+    // Opcional: Você pode atualizar a data para saber quando foi editado
+    comentario.setDataEnvio(LocalDateTime.now()); 
+
+    // 3. Salva a alteração
+    return comentarioRepository.save(comentario);
+}
 }
